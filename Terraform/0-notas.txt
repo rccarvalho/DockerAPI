@@ -1,0 +1,33 @@
+
+#Logando via terminal através do Azure CLI
+az login
+
+#Logando via terminal através do Azure CLI
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/{subscriptions}"
+
+-----------------------------------------------
+
+#Iniciando o Terraform
+terraform init
+
+#Iniciando o Planejamento do Terraform
+terraform plan -var "kubernetes_client_id={appId}" -var "kubernetes_client_secret={password}" -var "location=Brazil South" -var "environment=dev" -out run.plan
+
+#Executando o que foi planejado
+terraform apply "run.plan"
+
+#Destruindo o que foi planejado
+terraform destroy -var "kubernetes_client_id={appId}" -var "kubernetes_client_secret={password}" -var "location=Brazil South" -var "environment=dev"
+
+
+-----------------------------------------------
+
+
+#Exportando o config do kubernetes para o arquivo azurek8s
+echo "$(terraform output kube_config)" > ~/.kube/azurek8s
+
+#Alterando variavel de ambiente do KUBECONFIG para apontar para o nome cluster
+export KUBECONFIG=~/.kube/azurek8s
+
+
+

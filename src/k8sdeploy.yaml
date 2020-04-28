@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nome
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: nome
+  name: demo-dev-app-svc
+  labels:
+    app: demo-dev
+    tier: app
+    version: v1
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: demo-dev
+    tier: app
+    version: v1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: nome
+  name: demo-dev-app-dep
+  labels:
+    app: demo-dev
+    tier: app
+    version: v1
+spec:
+  selector:
+    matchLabels:
+      app: demo-dev
+      tier: app
+      version: v1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-dev
+        tier: app
+        version: v1
+    spec:
+      containers:
+        - name: demoapp
+          image: rccarvalho/dockerdemo:v1
+          ports:
+            - name: http 
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            httpGet:
+              path: /swagger/index.html
+              port: 80
+          resources:
+            requests:
+              cpu: 25m
+              memory: 200Mi
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%

@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#TerraForm
+*.terraform/
+.terraform.*
+terraform.tfstate*
+
 # User-specific files
 *.rsuser
 *.suo

@@ -1,0 +1,144 @@
+#### Docker ####
+
+#Criar Imagem baseada no Dockerfile
+docker build -t rccarvalho/dockerdemo:v1 .
+
+#Rodar imagem criada setando PortaOrigem:PortaDestino modo iterativo
+docker run -it -p 8080:80 dockerdemo
+
+#Rodar imagem criada setando PortaOrigem:PortaDestino modo Detach
+docker run -d -p 8080:80 dockerdemo
+
+#Listar os Conateiners 
+docker container ls 
+docker container ls -a 
+
+#Listas Imagens em execução
+docker kill [ContainerID]
+
+#Informações sobre o Docker 
+docker info
+
+#Logando no Docker Hub ou outro repositorio
+docker login
+docker logout
+
+#Listando todas as Imagens
+docker images 
+
+#Baixando uma imagem
+docker pull redis:alpine
+
+#Buscando uma imagem
+docker search nginx
+
+#Rodando um Container
+docker run -d -p 8080:80 dockerdemo
+docker run -it -p 8080:80 dockerdemo
+docker run --name dockerdemo -e ENVIRONMENT=Development -m 100m -d -p 8080:80 dockerdemo
+
+#Estatisticas dos containers
+docker stats
+
+docker run --rm -u root redis:latest
+docker run -v $HOME/dev/temp:/docker --name meuRedis redis:latest
+
+#Executando um comando no meu container
+docker exec -it dockerdemo bash
+
+#Iniciando, Parando e Apagando um Container
+docker container stop {ContainerName ou ContainerID }
+docker container start {ContainerName ou ContainerID }
+docker container rm -f {ContainerName ou ContainerID }
+
+#Visualizando Logs
+docker logs -f {ContainerName ou ContainerID } 
+
+#Apagando uma imagem
+docker image rm {ImageName}
+
+#Gerando uma imagem com base no Docker File
+docker build -t dockerdemo.
+
+#Tagueando uma imagem
+docker tag dockerdemo rccarvalho/dockerdemo:v1
+
+#Enviando uma imagem para o repositorio
+docker push dockerdemo rccarvalho/dockerdemo:v1
+docker push dockerdemo rccarvalho/dockerdemo:latest
+
+#Apagar todos os containers e Imagens
+docker stop $(docker ps -a -q)
+docker rm -f $(docker ps -a -q)
+docker image rm -f $(docker image ls -a -q)
+
+### Kubernetes ###
+
+----------COMANDO DO 1o DIA----------
+
+#Listando todos os nós do meu cluster
+kubectl get nodes
+
+#Listando todos os PODS
+kubectl get pods 
+kubectl get pods --all-namespaces
+
+#Listando todos os PODS com mais detalhes
+kubectl get pods -o wide
+kubectl get pods -o wide --all-namespaces
+
+#Listando todos os Services
+kubectl get services 
+kubectl get services  --all-namespaces
+
+#Listando todos os Deploys
+kubectl get deploy 
+kubectl get deploy  --all-namespaces
+
+#Listando todos os Services
+kubectl get deploy 
+kubectl get deploy  --all-namespaces
+
+#Fazendo o primeiro deploy
+kubectl create -f k8SDeployPrimeiro.yaml
+
+#Vendo o Deploy
+kubectl describe deployment <DeployName>
+
+#Vendo o Deploy
+kubectl describe replicaset <ReplicaSetName>
+
+#Vendo o Deploy
+kubectl describe pods <PodName>
+
+#Atualizando o primeiro deploy
+kubectl apply -f k8SDeployPrimeiro.yaml
+
+#Atualizando o primeiro deploy
+kubectl delete -f k8SDeployPrimeiro.yaml
+
+#Pegando Historico de Rollout do deploy
+kubectl rollout history deploy <DeployName>    
+kubectl rollout history deploy demo-dev-app-dep
+
+#Dando Rollback para versao 1
+kubectl rollout undo deploy <DeployName> --to-revision=1
+kubectl rollout undo deploy demo-dev-app-dep --to-revision=1
+kubectl rollout undo deploy hnd-demo-dev-app-dep -n hernandes
+
+#Adicionando uma Anotação para ficar no change-cause
+kubectl annotate deploy demo-dev-app-dep kubernetes.io/change-cause='demoapp - v1'
+kubectl annotate deploy demo-dev-app-dep kubernetes.io/change-cause='demoapp - v2'
+
+#Entrando em um container
+kubectl exec -it <RedisContainerName> sh
+kubectl exec -it <ContainerName> bash
+
+#Editando um deploy diretamente
+kubectl edit deploy demo-dev-app-dep
+
+#Vendo processamento dos PODS
+kubectl top pods
+
+#Vendo processamento dos NODES
+kubectl top nodes
