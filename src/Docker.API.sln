@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Windows", "API.Windows\API.Windows.csproj", "{7243FE8A-6C84-4EAD-9370-5018DD688AB9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Linux", "API.Linux\API.Linux.csproj", "{3F3991F9-3F44-4263-BB82-F9AF9D06EC41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaCEP", "ViaCEP\ViaCEP.csproj", "{F556A578-A8A7-4327-95DC-4C472F2003A1}"

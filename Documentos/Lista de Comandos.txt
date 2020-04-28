@@ -1,0 +1,101 @@
+----------COMANDO DO 1o DIA----------
+
+#Criar Imagem baseada no Dockerfile
+docker [Comando] --help
+
+#Criar Imagem baseada no Dockerfile
+docker build -t rccarvalho/dockerdemo:v1 .
+
+#Rodar imagem criada setando PortaOrigem:PortaDestino modo iterativo
+docker run -it -p 8080:80 dockerdemo
+
+#Rodar imagem criada setando PortaOrigem:PortaDestino modo Detach
+docker run -d -p 8080:80 dockerdemo
+
+#Listas Imagens em execução
+docker ps
+
+#Listas Imagens em execução
+docker kill [ContainerID]
+
+----------COMANDO DO 2o DIA----------
+
+#Informações sobre o Docker 
+docker info
+
+#Logando no Docker Hub ou outro repositorio
+docker login
+docker logout
+
+#Listando todas as Imagens
+docker images (-a  mostra imagens ocultas)
+
+#Baixando uma imagem
+docker pull redis:alpine
+
+#Buscando uma imagem
+docker search nginx
+
+#Rodando um Container
+docker run --rm -d -p 8080:80 dockerdemo
+docker run -it --rm -p 8080:80 dockerdemo
+docker run --rm --name dockerdemo -e ENVIRONMENT=Development -m 100m -d -p 8080:80 dockerdemo
+docker update -m 1000m dockerdemo (-1 ilimitado)
+
+#Estatisticas dos containers
+docker stats
+
+docker run --rm -u root redis:latest
+docker run -v $HOME/dev/temp:/docker --name meuRedis redis:latest
+
+#Analisando o meu containers
+docker inspect {ContainerID}
+
+#Executando um comando no meu container
+docker exec -it dockerdemo bash
+docker exec -d dockerdemo touch meuArquivo
+
+#Iniciando, Parando, Reiniciando, Matando e Apagando um Container
+docker start {ContainerName ou ContainerID }
+docker stop {ContainerName ou ContainerID }
+docker restart {ContainerName ou ContainerID }
+docker kill {ContainerName ou ContainerID }
+docker pause {ContainerName ou ContainerID }
+docker unpause {ContainerName ou ContainerID }
+docker rename {NomeContainerAtual} {NomeContainerNovo}
+docker rm -f {ContainerName ou ContainerID }
+
+#Listando Containers
+docker ps -a (todos)
+docker ps -q (Somente ContainerID)
+
+
+#Visualizando Logs
+docker logs -f {ContainerName ou ContainerID } 
+#Apagando uma imagem
+docker rmi {ImageName}
+
+#Gerando uma imagem após uma alteração
+docker commit {ImageName}
+
+#Gerando uma imagem com base no Docker File
+docker build -t dockerdemo.
+
+#Tagueando uma imagem
+docker tag dockerdemo rccarvalho/dockerdemo:v1
+
+#Enviando uma imagem para o repositorio
+docker push dockerdemo rccarvalho/dockerdemo:v1
+docker push dockerdemo rccarvalho/dockerdemo:latest
+
+#Apagar todos os containers
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker image rm -f $(docker image ls -a -q)
+
+#Preservando dados mapeando volume
+ls $HOME/temp/docker
+docker run --rm -d --name dockerdemo -v $HOME/temp/docker:/data/temp/docker dockerdemo
+docker exec dockerdemo touch /data/temp/docker/arquivo.txt
+ls $HOME/temp/docker
+rm $HOME/temp/docker/arquivo.txt

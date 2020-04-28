@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-dev-app-svc
+  labels:
+    app: demo-dev
+    tier: app
+    version: v1
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+  selector:
+    app: demo-dev
+    tier: app
+    version: v1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-dev-app-dep
+  labels:
+    app: demo-dev
+    tier: app
+    version: v1
+spec:
+  selector:
+    matchLabels:
+      app: demo-dev
+      tier: app
+      version: v1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-dev
+        tier: app
+        version: v1
+    spec:
+      containers:
+        - name: demoapp
+          image: rccarvalho/dockerdemo:v1
+          ports:
+            - name: http 
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 3600
+            httpGet:
+              path: /swagger/index.html
+              port: 80
+          resources:
+            requests:
+              cpu: 25m
+              memory: 200Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-dev-redis-svc
+  labels:
+    app: demo-dev
+    tier: persistence
+    version: v1
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: demo-dev
+    tier: persistence
+    version: v1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-dev-redis-dep
+spec:
+  selector:
+    matchLabels:
+      app: demo-dev
+      tier: persistence
+      version: v1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-dev
+        tier: persistence
+        version: v1
+    spec:
+      containers:
+        - name: redis
+          image: redis:alpine
+          resources:
+            requests:
+              cpu: 25m
+              memory: 100Mi
+          ports:
+            - containerPort: 6379      
