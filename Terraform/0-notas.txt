@@ -3,7 +3,7 @@
 az login
 
 #Logando via terminal através do Azure CLI
-az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/75bef159-7d8a-48c1-8cd5-f1be49ee36ec"
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/{subscriptions}"
 
 -----------------------------------------------
 
