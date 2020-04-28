@@ -1,28 +1,33 @@
+
+#Logando via terminal através do Azure CLI
 az login
 
+#Logando via terminal através do Azure CLI
 az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/75bef159-7d8a-48c1-8cd5-f1be49ee36ec"
 
-5by5
-{
-  "appId": "9b8565a1-9149-4cec-9927-34261f37c083",
-  "displayName": "azure-cli-2020-04-25-13-10-56",
-  "name": "http://azure-cli-2020-04-25-13-10-56",
-  "password": "e573f8a8-eb36-4081-a43b-18a9999f8b1b",
-  "tenant": "9e17ef61-f2b1-4007-92dc-84d406f0f36d"
-}
+-----------------------------------------------
 
-
+#Iniciando o Terraform
 terraform init
 
-terraform plan -var "kubernetes_client_id=9b8565a1-9149-4cec-9927-34261f37c083" -var "kubernetes_client_secret=e573f8a8-eb36-4081-a43b-18a9999f8b1b" -var "location=Brazil South" -var "environment=dev" -out run.plan
+#Iniciando o Planejamento do Terraform
+terraform plan -var "kubernetes_client_id={appId}" -var "kubernetes_client_secret={password}" -var "location=Brazil South" -var "environment=dev" -out run.plan
 
+#Executando o que foi planejado
 terraform apply "run.plan"
 
-terraform destroy -var "kubernetes_client_id=9b8565a1-9149-4cec-9927-34261f37c083" -var "kubernetes_client_secret=e573f8a8-eb36-4081-a43b-18a9999f8b1b" -var "location=Brazil South" -var "environment=dev"
+#Destruindo o que foi planejado
+terraform destroy -var "kubernetes_client_id={appId}" -var "kubernetes_client_secret={password}" -var "location=Brazil South" -var "environment=dev"
 
 
+-----------------------------------------------
+
+
+#Exportando o config do kubernetes para o arquivo azurek8s
 echo "$(terraform output kube_config)" > ~/.kube/azurek8s
 
+#Alterando variavel de ambiente do KUBECONFIG para apontar para o nome cluster
 export KUBECONFIG=~/.kube/azurek8s
 
-kubectl proxy
+
+

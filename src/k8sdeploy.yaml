@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: nome
   name: demo-dev-app-svc
   labels:
     app: demo-dev
     tier: app
     version: v1
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 80
   selector:
@@ -18,6 +19,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: nome
   name: demo-dev-app-dep
   labels:
     app: demo-dev
@@ -54,8 +56,6 @@ spec:
             requests:
               cpu: 25m
               memory: 200Mi
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
   strategy:
@@ -63,49 +63,3 @@ spec:
     rollingUpdate:
       maxUnavailable: 25%
       maxSurge: 25%
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: demo-dev-redis-svc
-  labels:
-    app: demo-dev
-    tier: persistence
-    version: v1
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 6379
-      targetPort: 6379
-  selector:
-    app: demo-dev
-    tier: persistence
-    version: v1
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: demo-dev-redis-dep
-spec:
-  selector:
-    matchLabels:
-      app: demo-dev
-      tier: persistence
-      version: v1
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: demo-dev
-        tier: persistence
-        version: v1
-    spec:
-      containers:
-        - name: redis
-          image: redis:alpine
-          resources:
-            requests:
-              cpu: 25m
-              memory: 100Mi
-          ports:
-            - containerPort: 6379      
